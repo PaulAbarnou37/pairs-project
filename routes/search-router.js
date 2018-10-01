@@ -94,6 +94,55 @@ router.get("/searches/:searchId", (req, res, next) => {
             oneSearch.dateRangeMatch.dateRangeIntersection.start, 
             oneSearch.dateRangeMatch.dateRangeIntersection.end);
 
+            function findDuplicatedDates(arra1) {
+              var object = {};
+              var result = [];
+        
+              arra1.forEach(function (item) {
+                if(!object[item])
+                    object[item] = 0;
+                  object[item] += 1;
+              })
+        
+              for (var prop in object) {
+                 if(object[prop] >= 2) {
+                     result.push(prop);
+                 }
+              }
+        
+              if (result.length === 0){
+                return 0
+              } else {
+                let numberDuplicates = result.length;
+                return numberDuplicates
+              };
+          }
+
+          function findDuplicatedDatesArray(arra1) {
+            var object = {};
+            var result = [];
+      
+            arra1.forEach(function (item) {
+              if(!object[item])
+                  object[item] = 0;
+                object[item] += 1;
+            })
+      
+            for (var prop in object) {
+               if(object[prop] >= 2) {
+                   result.push(prop);
+               }
+            }
+      
+            if (result.length === 0){
+              return 0
+            } else {
+              return result
+            };
+        }
+
+          let commonRangeInDays = (new Date(oneSearch.dateRangeMatch.dateRangeIntersection.end) - new Date(oneSearch.dateRangeMatch.dateRangeIntersection.start))/1000/60/60/24;
+
 
               oneSearch.searchesSelectedDaysInRange = oneSearch.searchObject.selectedDays
               .filter(oneDay => {
@@ -109,11 +158,18 @@ router.get("/searches/:searchId", (req, res, next) => {
                 )})
               
               oneSearch.bothSelectedDays = oneSearch.searchesSelectedDaysInRange.concat(oneSearch.mySelectedDaysInRange);
-              
+
+              if (commonRangeInDays < oneSearch.bothSelectedDays.length || commonRangeInDays === oneSearch.bothSelectedDays.length){
+                oneSearch.scoreSelectedDays = ((( oneSearch.bothSelectedDays.length - findDuplicatedDates(oneSearch.bothSelectedDays) - (oneSearch.bothSelectedDays.length - (oneSearch.bothSelectedDays.length - findDuplicatedDates(oneSearch.bothSelectedDays)))*0,5 ))*100)/oneSearch.bothSelectedDays.length;
+                oneSearch.duplicatedDays = findDuplicatedDatesArray(oneSearch.bothSelectedDays)
+              } else if (commonRangeInDays > oneSearch.bothSelectedDays.length) {
+                oneSearch.scoreSelectedDays = ((commonRangeInDays - (commonRangeInDays - oneSearch.bothSelectedDays.length) - findDuplicatedDates(oneSearch.bothSelectedDays))*100)/commonRangeInDays;
+                oneSearch.duplicatedDays = findDuplicatedDatesArray(oneSearch.bothSelectedDays)
+              } else {console.log('Common Range Length:', commonRangeInDays)};
 
         })
 
-            console.log('These are my data received in the front', matchesRatios);
+            console.log('HEY HEY THIS IS A TEST', matchesRatios);
               res.json(matchesRatios)
             })   
     })
