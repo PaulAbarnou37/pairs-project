@@ -68,7 +68,6 @@ router.get("/searches/:searchId", (req, res, next) => {
                 mySearch: mySearch,
                 priceMatch: ((mySearch.maxPrice / oneItem.priceMatch ) * 100),
                 dateRangeMatch : {dateRangeIntersection: rangeInCommon, myStartToEndDate: (mySearch.endDate - mySearch.startDate)/1000/60/60/24},
-                
               })
             } else { 
               return ({
