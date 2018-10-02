@@ -35,7 +35,7 @@ router.get("/searches/:searchId", (req, res, next) => {
   let myDateRange ;
 
   // Find me all the searches that have not been made by me. ( TO CHANGE )
-  Searches.find({ owner: { $eq: _id } } )
+  Searches.find({ owner: { $ne: _id } } )
     .populate('owner')
     .then(searchesDoc => {
       
