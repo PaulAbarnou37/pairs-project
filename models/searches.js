@@ -14,6 +14,7 @@ const searchSchema = new Schema({
   endDate: {type: Date, required: true},
   selectedDays: {type: [String], required: true},
   maxPrice: {type: Number, required: true},
+  results: {type: [Number]}
 }, {
   // additional settings for Schema constructor function (class)
   timestamps: true,

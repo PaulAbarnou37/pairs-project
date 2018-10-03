@@ -20,6 +20,32 @@ router.post("/search", (req, res, next) => {
     .catch(err => next(err));
 });
 
+router.post("/searches/:searchId", (req, res, next) => {
+  const {searchId} = req.params;
+  let resultsRatio = [];
+  req.body.forEach(oneResult => {
+    // let totalRatioNumber = Number(oneResult.totalMatchRatio);
+    return resultsRatio.push(oneResult.totalMatchRatio)
+  })
+
+  console.log('This is my resultsRatio', resultsRatio)
+
+  Searches.findByIdAndUpdate(
+    searchId,
+    { $set: { results: resultsRatio } },
+    // "new" gets the updated version of the document
+    { runValidators: true, new: true }
+  )
+    .then(resultDoc => res.json(resultDoc))
+    .catch(err => next(err));
+
+
+  // console.log('This is my REQ BODY GOGOO',totalMatchRatio)
+  // Searches.create({ owner, city, startDate, endDate, selectedDays, maxPrice })
+  //   .then(searchesDoc => res.json(searchesDoc))
+  //   .catch(err => next(err));
+});
+
 
 // ---------------------------------------------------------------------------------
 // ----------------------------RESULTS OF SEARCH PAGE-------------------------------
@@ -168,7 +194,7 @@ router.get("/searches/:searchId", (req, res, next) => {
 
         })
 
-            console.log('HEY HEY THIS IS A TEST', matchesRatios);
+            // console.log('HEY HEY THIS IS A TEST', matchesRatios);
               res.json(matchesRatios)
             })   
     })
@@ -176,6 +202,21 @@ router.get("/searches/:searchId", (req, res, next) => {
 
     .catch(err => next(err));
 });
+
+
+router.get("/mysearches", (req, res, next) => {
+const { _id } = req.user;
+Searches.find({ owner: { $eq: _id } } )
+    .then(mySearchesDoc => {
+      console.log('This is my searches doc', mySearchesDoc)
+      res.json(mySearchesDoc)
+    })
+    .catch(err => next(err));
+  });
+
+
+
+
 
 
 
