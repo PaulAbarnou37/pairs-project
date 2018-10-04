@@ -38,13 +38,15 @@ router.post("/searches/:searchId", (req, res, next) => {
   )
     .then(resultDoc => res.json(resultDoc))
     .catch(err => next(err));
-
-
-  // console.log('This is my REQ BODY GOGOO',totalMatchRatio)
-  // Searches.create({ owner, city, startDate, endDate, selectedDays, maxPrice })
-  //   .then(searchesDoc => res.json(searchesDoc))
-  //   .catch(err => next(err));
 });
+
+router.delete("/searches/:searchId", (req, res, next) => {
+  const {searchId} = req.params;
+  Searches.findByIdAndRemove(searchId)
+    .then(searchesDoc => res.json(searchesDoc))
+    .catch(err => next(err));
+});
+
 
 
 // ---------------------------------------------------------------------------------
