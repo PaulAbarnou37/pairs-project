@@ -54,6 +54,7 @@ router.delete("/searches/:searchId", (req, res, next) => {
 // ---------------------------------------------------------------------------------
 
 
+
 router.get("/searches/:searchId", (req, res, next) => {
   const { _id } = req.user;
   const { searchId } = req.params;
@@ -150,6 +151,7 @@ router.get("/searches/:searchId", (req, res, next) => {
             var result = [];
       
             arra1.forEach(function (item) {
+              item = item.slice(0, 10)
               if(!object[item])
                   object[item] = 0;
                 object[item] += 1;
