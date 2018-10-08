@@ -188,13 +188,21 @@ router.get("/searches/:searchId", (req, res, next) => {
               
               oneSearch.bothSelectedDays = oneSearch.searchesSelectedDaysInRange.concat(oneSearch.mySelectedDaysInRange);
 
-              if (commonRangeInDays < oneSearch.bothSelectedDays.length || commonRangeInDays === oneSearch.bothSelectedDays.length){
-                oneSearch.scoreSelectedDays = ((( oneSearch.bothSelectedDays.length - findDuplicatedDates(oneSearch.bothSelectedDays)*2 - (oneSearch.bothSelectedDays.length - (oneSearch.bothSelectedDays.length - findDuplicatedDates(oneSearch.bothSelectedDays)))*0,5 ))*100)/oneSearch.bothSelectedDays.length;
-                oneSearch.duplicatedDays = findDuplicatedDatesArray(oneSearch.bothSelectedDays)
-              } else if (commonRangeInDays > oneSearch.bothSelectedDays.length) {
-                oneSearch.scoreSelectedDays = ((commonRangeInDays - (commonRangeInDays - oneSearch.bothSelectedDays.length) - findDuplicatedDates(oneSearch.bothSelectedDays)*2)*100)/commonRangeInDays;
-                oneSearch.duplicatedDays = findDuplicatedDatesArray(oneSearch.bothSelectedDays)
-              } else {console.log('Common Range Length:', commonRangeInDays)};
+              // if (commonRangeInDays < oneSearch.bothSelectedDays.length || commonRangeInDays === oneSearch.bothSelectedDays.length){
+              //   oneSearch.scoreSelectedDays = ((( oneSearch.bothSelectedDays.length - findDuplicatedDates(oneSearch.bothSelectedDays)*2 - (oneSearch.bothSelectedDays.length - (oneSearch.bothSelectedDays.length - findDuplicatedDates(oneSearch.bothSelectedDays)))*0,5 ))*100)/oneSearch.bothSelectedDays.length;
+              //   oneSearch.duplicatedDays = findDuplicatedDatesArray(oneSearch.bothSelectedDays)
+              // } else if (commonRangeInDays > oneSearch.bothSelectedDays.length) {
+              //   oneSearch.scoreSelectedDays = ((commonRangeInDays - (commonRangeInDays - oneSearch.bothSelectedDays.length) - findDuplicatedDates(oneSearch.bothSelectedDays)*2)*100)/commonRangeInDays;
+              //   oneSearch.duplicatedDays = findDuplicatedDatesArray(oneSearch.bothSelectedDays)
+              // } else {console.log('Common Range Length:', commonRangeInDays)};
+              if (findDuplicatedDatesArray(oneSearch.bothSelectedDays) > ((commonRangeInDays))){
+              oneSearch.scoreSelectedDays = (((oneSearch.bothSelectedDays.length - 2 * (findDuplicatedDates(oneSearch.bothSelectedDays)))/commonRangeInDays)*100)*0,9;
+              oneSearch.duplicatedDays = findDuplicatedDatesArray(oneSearch.bothSelectedDays);
+              } else {
+              oneSearch.scoreSelectedDays = ((oneSearch.bothSelectedDays.length - 2 * (findDuplicatedDates(oneSearch.bothSelectedDays)))/commonRangeInDays)*100;
+              oneSearch.duplicatedDays = findDuplicatedDatesArray(oneSearch.bothSelectedDays);
+              }
+
 
         })
 
